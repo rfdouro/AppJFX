@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -15,6 +17,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
@@ -22,36 +25,48 @@ import javafx.stage.StageStyle;
  * JavaFX App
  */
 public class App extends Application {
- 
+
  private static Scene scene;
- 
+
  @Override
  public void start(Stage stage) throws IOException {
   //scene = new Scene(loadFXML("primary"), 640, 480);
   //scene = new Scene(loadFXML("JanelaMain"), 640, 480);
   scene = new Scene(loadFXML("Janela01"), 640, 480);
+
+  scene.widthProperty().addListener(new ChangeListener<Number>() {
+   @Override
+   public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+    System.out.println("Width: " + newValue);
+    StackPane root = (StackPane) scene.getRoot();
+    for (Object o : root.getChildren()) {
+     System.out.println("-> : " + o.getClass());
+    }
+   }
+  });
+
   stage.setScene(scene);
   stage.setTitle("Aplicação de Exemplo");
   //stage.getIcons().add(new Image("file:icon.png"));
   stage.getIcons().add(new Image(App.class.getResourceAsStream("images/icon.png")));
   stage.setMaximized(true);
-  
+
   stage.show();
  }
- 
+
  static void setRoot(String fxml) throws IOException {
   scene.setRoot(loadFXML(fxml));
  }
- 
+
  private static Parent loadFXML(String fxml) throws IOException {
   FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
   return fxmlLoader.load();
  }
- 
+
  public static void main(String[] args) {
   launch();
  }
- 
+
  public static void loading() {
   ProgressForm pForm = new ProgressForm();
 
@@ -77,9 +92,9 @@ public class App extends Application {
   task.setOnSucceeded(event -> {
    pForm.getDialogStage().close();
   });
-  
+
   pForm.getDialogStage().show();
-  
+
   Thread thread = new Thread(task);
   thread.start();
  }
@@ -88,11 +103,11 @@ public class App extends Application {
   * **************************
   */
  public static class ProgressForm {
-  
+
   private final Stage dialogStage;
   private final ProgressBar pb = new ProgressBar();
   private final ProgressIndicator pin = new ProgressIndicator();
-  
+
   public ProgressForm() {
    dialogStage = new Stage();
    dialogStage.initStyle(StageStyle.UTILITY);
@@ -105,7 +120,7 @@ public class App extends Application {
    // PROGRESS BAR
    final Label label = new Label();
    label.setText("alerto");
-   
+
    pb.setProgress(-1F);
    //pin.setProgress(-1F);
 
@@ -113,20 +128,20 @@ public class App extends Application {
    hb.setSpacing(5);
    hb.setAlignment(Pos.CENTER);
    hb.getChildren().addAll(pb, pin);
-   
+
    Scene scene = new Scene(hb);
    dialogStage.setScene(scene);
   }
-  
+
   public void activateProgressBar(final Task<?> task) {
    pb.progressProperty().bind(task.progressProperty());
    //pin.progressProperty().bind(task.progressProperty());
    dialogStage.show();
   }
-  
+
   public Stage getDialogStage() {
    return dialogStage;
   }
  }
- 
+
 }

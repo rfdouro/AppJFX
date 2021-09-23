@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -42,6 +43,9 @@ public class Janela01Controller implements Initializable {
  @FXML
  private AnchorPane anchorPane;
 
+ @FXML
+ private ScrollPane scrollPane;
+
  /**
   * Initializes the controller class.
   */
@@ -54,7 +58,6 @@ public class Janela01Controller implements Initializable {
   hBox.setPadding(new Insets(10));
   hBox.setAlignment(Pos.CENTER);
 
-  
   VBox vBox = new VBox();
   ProgressBar pb = new ProgressBar();
   ProgressIndicator pin = new ProgressIndicator();
@@ -87,15 +90,18 @@ public class Janela01Controller implements Initializable {
    hPane.setVisible(false);
    anchorPane.getChildren().clear();
   });
+
+  anchorPane.prefWidthProperty().bind(scrollPane.widthProperty().multiply(0.95));
+  //anchorPane.prefHeightProperty().bind(scrollPane.heightProperty().multiply(1.00));
  }
 
  @FXML
  private void sair() {
   System.exit(0);
  }
- 
+
  @FXML
- private void fecharJanelaInterna(){
+ private void fecharJanelaInterna() {
   anchorPane.getChildren().clear();
  }
 
