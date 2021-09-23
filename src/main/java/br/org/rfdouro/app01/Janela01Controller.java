@@ -15,11 +15,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -49,8 +52,22 @@ public class Janela01Controller implements Initializable {
   Button btn1 = new Button("One"), btn2 = new Button("Two");
   HBox hBox = new HBox(btn1, btn2);
   hBox.setPadding(new Insets(10));
+  hBox.setAlignment(Pos.CENTER);
+
+  
+  VBox vBox = new VBox();
+  ProgressBar pb = new ProgressBar();
+  ProgressIndicator pin = new ProgressIndicator();
+
+  pb.setProgress(-1F);
+  pin.setProgress(-1F);
+
+  vBox.setSpacing(5);
+  vBox.setAlignment(Pos.CENTER);
+  vBox.getChildren().addAll(pb, pin, hBox);
+
   //hBox.setSpacing(10);
-  hPane = new StackPane(hBox);
+  hPane = new StackPane(vBox);
   //hPane.setMaxHeight(100);
   hPane.setVisible(false);
   hPane.setStyle("-fx-background-color:#55555550");
@@ -65,21 +82,32 @@ public class Janela01Controller implements Initializable {
    ft.setToValue(0.0);
    ft.play();
   });
+
+  btn2.setOnAction((e) -> {
+   hPane.setVisible(false);
+   anchorPane.getChildren().clear();
+  });
  }
 
  @FXML
  private void sair() {
   System.exit(0);
  }
+ 
+ @FXML
+ private void fecharJanelaInterna(){
+  anchorPane.getChildren().clear();
+ }
 
  @FXML
  private void abre() throws IOException {
   setloading();
   AnchorPane newLoadedPane = FXMLLoader.load(getClass().getResource("JanelaMain.fxml"));
-  System.out.println("" + anchorPane.getBoundsInLocal() + "" + anchorPane.getBoundsInParent());
-  System.out.println("" + newLoadedPane.getBoundsInLocal() + "" + newLoadedPane.getBoundsInParent());
+  //coloco 100% para largura e altura
+  newLoadedPane.prefWidthProperty().bind(anchorPane.widthProperty().multiply(1.00));
+  newLoadedPane.prefHeightProperty().bind(anchorPane.heightProperty().multiply(1.00));
+
   anchorPane.getChildren().setAll(newLoadedPane);
-  System.out.println("=" + anchorPane.getChildren().size());
  }
 
  @FXML
