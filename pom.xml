@@ -46,7 +46,7 @@
     <artifactId>javafx-maven-plugin</artifactId>
     <version>0.0.4</version>
     <configuration>
-     <mainClass>br.org.rfdouro.app01.App</mainClass>
+     <mainClass>br.org.rfdouro.app01.AppMain</mainClass>
     </configuration>
     <executions>
      <execution>
